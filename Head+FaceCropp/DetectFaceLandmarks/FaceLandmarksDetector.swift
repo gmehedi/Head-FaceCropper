@@ -86,13 +86,18 @@ class FaceLandmarksDetector {
                 }
                 
              //   print("MMMXX  ", maxX,"  ", minX,"   ", maxY,"   ", minY)
-                bePath.addLine(to: CGPoint(x: minX, y: minY))
+               
                 
-                let con1 = CGPoint(x: max(0,  minX - 100), y: minY - ((maxY - minY) * 1.2) )
                 
-                let con2 = CGPoint(x: min(source.size.width,  maxX + 100), y: minY - ((maxY - minY) * 1.2) )
+               // bePath.addLine(to: mappedPoints.first!)
                 
-                bePath.addCurve(to: CGPoint(x: maxX, y: minY), controlPoint1: con1, controlPoint2: con2)
+               // minX = mappedPoints.first?.x ?? minX
+                
+                let con1 = CGPoint(x: max(0,  minX - 50), y: minY - ((maxY - minY) * 1.2) )
+                
+                let con2 = CGPoint(x: min(source.size.width,  maxX + 50), y: minY - ((maxY - minY) * 1.2) )
+               
+                bePath.addCurve(to: mappedPoints.first!, controlPoint1: con1, controlPoint2: con2)
                 bePath.close()
                 
             }

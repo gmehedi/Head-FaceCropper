@@ -16,6 +16,8 @@
 		4EDCF95A1EFAA5E300571ED9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EDCF9581EFAA5E300571ED9 /* LaunchScreen.storyboard */; };
 		4EDCF9651EFAA5E300571ED9 /* DetectFaceLandmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCF9641EFAA5E300571ED9 /* DetectFaceLandmarksTests.swift */; };
 		4EDCF9701EFAA5E300571ED9 /* DetectFaceLandmarksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCF96F1EFAA5E300571ED9 /* DetectFaceLandmarksUITests.swift */; };
+		E0D978422885144200162C3D /* FaceDetectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D978402885144200162C3D /* FaceDetectVC.swift */; };
+		E0D978432885144200162C3D /* FaceDetectVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0D978412885144200162C3D /* FaceDetectVC.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,8 @@
 		4EDCF96B1EFAA5E300571ED9 /* DetectFaceLandmarksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DetectFaceLandmarksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EDCF96F1EFAA5E300571ED9 /* DetectFaceLandmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectFaceLandmarksUITests.swift; sourceTree = "<group>"; };
 		4EDCF9711EFAA5E300571ED9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E0D978402885144200162C3D /* FaceDetectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectVC.swift; sourceTree = "<group>"; };
+		E0D978412885144200162C3D /* FaceDetectVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FaceDetectVC.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +113,8 @@
 				4EDCF9561EFAA5E300571ED9 /* Assets.xcassets */,
 				4EDCF9581EFAA5E300571ED9 /* LaunchScreen.storyboard */,
 				4EDCF95B1EFAA5E300571ED9 /* Info.plist */,
+				E0D978402885144200162C3D /* FaceDetectVC.swift */,
+				E0D978412885144200162C3D /* FaceDetectVC.xib */,
 			);
 			path = DetectFaceLandmarks;
 			sourceTree = "<group>";
@@ -237,6 +243,7 @@
 			files = (
 				4EDCF95A1EFAA5E300571ED9 /* LaunchScreen.storyboard in Resources */,
 				4EDCF9571EFAA5E300571ED9 /* Assets.xcassets in Resources */,
+				E0D978432885144200162C3D /* FaceDetectVC.xib in Resources */,
 				4EDCF9551EFAA5E300571ED9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,6 +269,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0D978422885144200162C3D /* FaceDetectVC.swift in Sources */,
 				4EDCF9521EFAA5E300571ED9 /* ViewController.swift in Sources */,
 				4E871D991F129B7D00062C1C /* FaceLandmarksDetector.swift in Sources */,
 				4E40775D1F129F1F00D570AB /* UIImage+Scale.swift in Sources */,
@@ -368,12 +376,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -419,10 +428,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -436,7 +446,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mathieubolard.DetectFaceLandmarks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -450,7 +460,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mathieubolard.DetectFaceLandmarks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

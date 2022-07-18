@@ -16,13 +16,17 @@ class ViewController: UIViewController {
     let captureSession = AVCaptureSession()
     @IBOutlet weak var imageView: UIImageView!
     var finalImage: UIImage?
+    var usingFrontCamera = true
+    var captureDevice: AVCaptureDevice!
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationController?.isNavigationBarHidden = true
+        let vc = FaceDetectVC()
+        self.navigationController?.pushViewController(vc, animated: true)
         // Do any additional setup after loading the view, typically from a nib.
-        configureDevice()
+       // configureDevice()
     }
 
     
@@ -39,6 +43,51 @@ class ViewController: UIViewController {
         }
         
     }
+    
+    @IBAction private func changeCamera(_ cameraButton: UIButton) {
+        usingFrontCamera = !usingFrontCamera
+        self.captureSession.startRunning()
+        
+        do{
+            captureSession.removeInput(captureSession.inputs.first!)
+
+            if(usingFrontCamera){
+                captureDevice = getFrontCamera()
+                do {
+                    try captureDevice.lockForConfiguration()
+                    let zoomFactor:CGFloat = 1
+                    captureDevice.videoZoomFactor = zoomFactor
+                    captureDevice.unlockForConfiguration()
+                } catch {
+                       //Catch error from lockForConfiguration
+                }
+            }else{
+                captureDevice = getBackCamera()
+                
+                do {
+                    try captureDevice.lockForConfiguration()
+                    let zoomFactor:CGFloat = 3
+                    captureDevice.videoZoomFactor = zoomFactor
+                    captureDevice.unlockForConfiguration()
+                } catch {
+                       //Catch error from lockForConfiguration
+                }
+            }
+            let captureDeviceInput1 = try AVCaptureDeviceInput(device: captureDevice)
+            captureSession.addInput(captureDeviceInput1)
+        }catch{
+            print(error.localizedDescription)
+        }
+    }
+    
+    func getFrontCamera() -> AVCaptureDevice?{
+        return AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .front).devices.first
+    }
+
+    func getBackCamera() -> AVCaptureDevice?{
+        return AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back).devices.first
+    }
+    
     private func getDevice() -> AVCaptureDevice? {
         let discoverSession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera, .builtInTelephotoCamera, .builtInWideAngleCamera], mediaType: .video, position: .front)
         return discoverSession.devices.first
@@ -46,6 +95,8 @@ class ViewController: UIViewController {
 
     private func configureDevice() {
         if let device = getDevice() {
+            self.captureDevice = device
+            
             do {
                 try device.lockForConfiguration()
                 if device.isFocusModeSupported(.continuousAutoFocus) {
