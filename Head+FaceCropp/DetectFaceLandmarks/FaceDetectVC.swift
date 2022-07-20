@@ -11,11 +11,31 @@ import AVFoundation
 import Vision
 import Photos
 
+class FaceTemplateInfo {
+    
+    var x: CGFloat
+    var y: CGFloat
+    var width: CGFloat
+    var height: CGFloat
+    var centerX: CGFloat
+    var centerY: CGFloat
+    
+    init(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, centerX: CGFloat, centerY: CGFloat) {
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.centerX = centerX
+        self.centerY = centerY
+    }
+}
+
 class FaceDetectVC: UIViewController {
     
     @IBOutlet weak var templateImageView: UIImageView!
     @IBOutlet weak var templateCollectoinView: UICollectionView!
     @IBOutlet weak var faceImageView: UIImageView!
+    @IBOutlet weak var faceContainerView: UIView!
     let faceDetector = FaceLandmarksDetector()
     let captureSession = AVCaptureSession()
     @IBOutlet weak var imageView: UIImageView!
@@ -26,25 +46,44 @@ class FaceDetectVC: UIViewController {
     @IBOutlet weak var faceImageViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var faceImageViewWidthConstraint: NSLayoutConstraint!
     var templateImages = [UIImage]()
+    var outputImages = [UIImage]()
+    var imageNames = ["IMG_0521", "IMG_0522", "IMG_0527", "IMG_0528", "IMG_0529"]
+    var faceImage: CIImage?
+    var faceTemplateInfo = [FaceTemplateInfo]()
+    var isFirst: Bool = true
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // Do any additional setup after loading the view, typically from a nib.
         configureDevice()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if self.isFirst {
+            self.view.layoutIfNeeded()
+            self.isFirst = false
+            self.initTemplateInfo()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         self.view.layoutIfNeeded()
+        self.setupCollectionView()
         
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
     
     @IBAction func tappedOnGellaryButton(_ sender: UIButton) {
-       // self.imagePickerPresent()
+        self.imagePickerPresent()
     }
     
     
@@ -58,24 +97,44 @@ class FaceDetectVC: UIViewController {
                     self.templateImageView.image = UIImage(named: "IMG_0522")
                     let output = resultImage.cropAlpha()
                     
-                    let rect = AVMakeRect(aspectRatio: output.size, insideRect: self.faceImageView.bounds)
-                    self.faceImageViewWidthConstraint.constant = rect.width
-                    self.faceImageViewHeightConstraint.constant = rect.height
-                    
                     self.faceImageView?.image = output
                     
                     if let ci = CIImage(image: output) ?? output.ciImage {
-                        self.exportTemplate(faceImg: ci)
+                        self.faceImage = ci
+                        self.reStoreFaceImage(faceImage: ci)
+                        self.templateCollectoinView.reloadData()
+                        
+                        self.templateImageView.image = self.outputImages[0]
+                        self.faceImageView.alpha = 0
                     }
                   
                 }
             }
         }
-        
     }
     
-    
     @IBAction private func changeCamera(_ cameraButton: UIButton) {
+        self.handleChangeCamera()
+    }
+    
+}
+
+extension FaceDetectVC {
+    
+    func getFrontCamera() -> AVCaptureDevice?{
+        return AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .front).devices.first
+    }
+    
+    func getBackCamera() -> AVCaptureDevice?{
+        return AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back).devices.first
+    }
+    
+    private func getDevice() -> AVCaptureDevice? {
+        let discoverSession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera, .builtInTelephotoCamera, .builtInWideAngleCamera], mediaType: .video, position: .front)
+        return discoverSession.devices.first
+    }
+    
+    func handleChangeCamera() {
         usingFrontCamera = !usingFrontCamera
         self.captureSession.startRunning()
         
@@ -111,19 +170,6 @@ class FaceDetectVC: UIViewController {
         }
     }
     
-    func getFrontCamera() -> AVCaptureDevice?{
-        return AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .front).devices.first
-    }
-    
-    func getBackCamera() -> AVCaptureDevice?{
-        return AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back).devices.first
-    }
-    
-    private func getDevice() -> AVCaptureDevice? {
-        let discoverSession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera, .builtInTelephotoCamera, .builtInWideAngleCamera], mediaType: .video, position: .front)
-        return discoverSession.devices.first
-    }
-    
     private func configureDevice() {
         if let device = getDevice() {
             self.captureDevice = device
@@ -154,11 +200,68 @@ class FaceDetectVC: UIViewController {
         }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func initTemplateInfo() {
+        for name in self.imageNames {
+            self.templateImages.append(UIImage(named: name)!)
+        }
+        
+        for i in 0 ..< self.templateImages.count {
+            let item = FaceTemplateInfo(x: 0, y: 0, width: 0, height: 0, centerX: 0, centerY: 0)
+            switch i {
+            case 0:
+                item.width = 60.0
+                item.height = 80.0
+                
+                item.centerX =  (self.faceContainerView.bounds.width * 0.5)
+                item.centerY = (self.faceContainerView.bounds.height * 0.5) - 35
+                item.x = item.centerX  - (item.width * 0.5)
+                item.y = item.centerY - (item.height * 0.5)
+                break
+            case 1:
+                
+                item.width = 105.0
+                item.height = 130.0
+                
+                item.centerX =  (self.faceContainerView.bounds.width * 0.5)
+                item.centerY = (self.faceContainerView.bounds.height * 0.5) - 50
+                item.x = item.centerX  - (item.width * 0.5)
+                item.y = item.centerY - (item.height * 0.5)
+                break
+            case 2:
+                item.width = 80.0
+                item.height = 100.0
+                
+                item.centerX =  (self.faceContainerView.bounds.width * 0.5)
+                item.centerY = (self.faceContainerView.bounds.height * 0.5) - 105
+                item.x = item.centerX  - (item.width * 0.5)
+                item.y = item.centerY - (item.height * 0.5)
+                break
+            case 3:
+                item.width = 80.0
+                item.height = 100.0
+                
+                item.centerX =  (self.faceContainerView.bounds.width * 0.5)
+                item.centerY = (self.faceContainerView.bounds.height * 0.5) - 130
+                item.x = item.centerX  - (item.width * 0.5)
+                item.y = item.centerY - (item.height * 0.5)
+                break
+            case 4:
+                item.width = 40.0
+                item.height = 60.0
+                
+                item.centerX =  (self.faceContainerView.bounds.width * 0.5) - 5
+                item.centerY = (self.faceContainerView.bounds.height * 0.5) - 45
+                item.x = item.centerX  - (item.width * 0.5)
+                item.y = item.centerY - (item.height * 0.5)
+                break
+            default:
+                break
+            }
+            self.faceTemplateInfo.append(item)
+        }
+        self.outputImages = self.templateImages
+        
     }
-    
 }
 
 extension FaceDetectVC: AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -210,7 +313,17 @@ extension FaceDetectVC: UIImagePickerControllerDelegate, UINavigationControllerD
                 self?.faceDetector.outputFaces(for: image) { (resultImage) in
                     DispatchQueue.main.async {
                         self?.templateImageView.image = UIImage(named: "IMG_0521")
-                        self?.faceImageView?.image = resultImage.cropAlpha()
+                        let output = resultImage.cropAlpha()
+                        
+                        if let ci = CIImage(image: output) ?? output.ciImage {
+                            self?.faceImage = ci
+                            self?.reStoreFaceImage(faceImage: ci)
+                            self?.templateCollectoinView.reloadData()
+
+                            self?.templateImageView.image = self?.outputImages[0]
+                            self?.faceImageView.alpha = 0
+                        }
+                      
                     }
                 }
             }
@@ -337,7 +450,7 @@ extension UIImage {
 }
 
 
-//MARK: CollectionView
+//MARK: Coll_onView
 extension FaceDetectVC {
     
     func setupCollectionView() {
@@ -373,17 +486,20 @@ extension FaceDetectVC {
 extension FaceDetectVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.templateImages.count
+        return self.outputImages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = self.templateCollectoinView.dequeueReusableCell(withReuseIdentifier: TemplateCollectionViewCell.id, for: indexPath) as? TemplateCollectionViewCell
-        cell?.imageView.image = self.templateImages[indexPath.item]
+        cell?.imageView.image = self.outputImages[indexPath.item]
+       
         return cell!
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        self.templateImageView.image = self.outputImages[indexPath.item]
+        self.updateFaceImageViewFrame(faceImageSize: self.faceImage?.extent.size ?? CGSize(width: 100, height: 100) , index: indexPath.item)
+        self.faceImageView.alpha = 0
         
     }
     
@@ -401,15 +517,50 @@ extension FaceDetectVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
 
 extension FaceDetectVC {
     
-    func exportTemplate(faceImg: CIImage) {
-        let tm = UIImage(named: "IMG_0522")
-        var cTemp = CIImage(image: tm!) ?? tm!.ciImage
+    func reStoreFaceImage(faceImage: CIImage) {
+        var imges = [UIImage]()
+        var index: Int = 0
+        
+        for _ in self.templateImages {
+            self.updateFaceImageViewFrame(faceImageSize: faceImage.extent.size, index: index)
+            let out = self.exportTemplate(faceImg: faceImage, index: index)
+            index += 1
+            imges.append(out)
+        }
+        self.outputImages = imges
+    }
+    
+    func updateFaceImageViewFrame(faceImageSize: CGSize, index: Int) {
+        switch index {
+        case 0:
+            self.faceImageViewWidthConstraint.constant = 80
+            self.faceImageViewHeightConstraint.constant = 80
+            self.faceImageView.layoutIfNeeded()
+            break
+        case 1:
+            self.faceImageViewWidthConstraint.constant = 140
+            self.faceImageViewHeightConstraint.constant = 140
+            self.faceImageView.layoutIfNeeded()
+            break
+        case 2:
+            break
+        default:
+            break
+        }
+        print("What  ",    self.faceImageView.frame,"  ", self.faceImageViewWidthConstraint.constant,"  ", self.faceImageViewHeightConstraint.constant,"  ", index)
+    }
+    
+    func exportTemplate(faceImg: CIImage, index: Int) -> UIImage {
+        let tm = self.templateImages[index]
+        var cTemp = CIImage(image: tm) ?? tm.ciImage
         
         let s512 = 512.0 / cTemp!.extent.width
         
         cTemp = cTemp?.transformed(by: CGAffineTransform(scaleX: s512, y: s512))
         
-        var scale = self.faceImageView.bounds.width / self.templateImageView.bounds.width
+        let item = self.faceTemplateInfo[index]
+        
+        var scale = item.width / self.templateImageView.bounds.width
         
         let curSize = scale * cTemp!.extent.width
         
@@ -417,19 +568,18 @@ extension FaceDetectVC {
         
         var face = faceImg.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
         
-        var transX = self.faceImageView.frame.origin.x / self.templateImageView.bounds.width
-        var transY = self.faceImageView.frame.origin.y / self.templateImageView.bounds.height
+        var transX = item.x / self.templateImageView.bounds.width
+        var transY = item.y / self.templateImageView.bounds.height
         
-        print("Fraa  ", self.faceImageView.frame,"   ", (transY *  cTemp!.extent.height))
+      //  print("Fraa  ", self.faceImageView.frame,"   ", (transY *  cTemp!.extent.height))
         transX = transX * cTemp!.extent.width
         transY = cTemp!.extent.height - (transY *  cTemp!.extent.height) - face.extent.height
-        
         
         face = face.transformed(by: CGAffineTransform(translationX: transX, y: transY))
         
         let output = self.blendImage(topImage: face, bgImage: cTemp!)
         
-        
+        return UIImage(ciImage: output!)
     }
     
     func blendImage(topImage: CIImage, bgImage: CIImage) -> CIImage? {

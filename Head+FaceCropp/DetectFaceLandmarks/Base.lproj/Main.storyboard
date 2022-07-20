@@ -33,7 +33,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Switch"/>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="B7O-da-34o">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="B7O-da-34o">
                                 <rect key="frame" x="127.5" y="238.5" width="120" height="120"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="nA9-L4-FZW"/>
@@ -85,6 +85,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="IMG_0521" width="1242" height="1326"/>
+        <image name="IMG_0521" width="1242" height="1242"/>
     </resources>
 </document>

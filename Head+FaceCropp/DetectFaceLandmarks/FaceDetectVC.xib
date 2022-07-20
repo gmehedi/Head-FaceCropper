@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FaceDetectVC" customModule="DetectFaceLandmarks" customModuleProvider="target">
             <connections>
+                <outlet property="faceContainerView" destination="n3B-TI-YM5" id="CYy-cC-RyE"/>
                 <outlet property="faceImageView" destination="mpi-K4-Z9D" id="txW-fE-1un"/>
                 <outlet property="faceImageViewHeightConstraint" destination="UVZ-Nx-r1A" id="WE1-WJ-hYc"/>
                 <outlet property="faceImageViewWidthConstraint" destination="z5p-Qw-bta" id="guF-ph-7uz"/>
