@@ -16,6 +16,8 @@
 		4EDCF95A1EFAA5E300571ED9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EDCF9581EFAA5E300571ED9 /* LaunchScreen.storyboard */; };
 		4EDCF9651EFAA5E300571ED9 /* DetectFaceLandmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCF9641EFAA5E300571ED9 /* DetectFaceLandmarksTests.swift */; };
 		4EDCF9701EFAA5E300571ED9 /* DetectFaceLandmarksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCF96F1EFAA5E300571ED9 /* DetectFaceLandmarksUITests.swift */; };
+		E0D4ABD72887B57D00837033 /* TemplateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D4ABD52887B57D00837033 /* TemplateCollectionViewCell.swift */; };
+		E0D4ABD82887B57D00837033 /* TemplateCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0D4ABD62887B57D00837033 /* TemplateCollectionViewCell.xib */; };
 		E0D978422885144200162C3D /* FaceDetectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D978402885144200162C3D /* FaceDetectVC.swift */; };
 		E0D978432885144200162C3D /* FaceDetectVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0D978412885144200162C3D /* FaceDetectVC.xib */; };
 /* End PBXBuildFile section */
@@ -53,6 +55,8 @@
 		4EDCF96B1EFAA5E300571ED9 /* DetectFaceLandmarksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DetectFaceLandmarksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EDCF96F1EFAA5E300571ED9 /* DetectFaceLandmarksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectFaceLandmarksUITests.swift; sourceTree = "<group>"; };
 		4EDCF9711EFAA5E300571ED9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E0D4ABD52887B57D00837033 /* TemplateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateCollectionViewCell.swift; sourceTree = "<group>"; };
+		E0D4ABD62887B57D00837033 /* TemplateCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TemplateCollectionViewCell.xib; sourceTree = "<group>"; };
 		E0D978402885144200162C3D /* FaceDetectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectVC.swift; sourceTree = "<group>"; };
 		E0D978412885144200162C3D /* FaceDetectVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FaceDetectVC.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -115,6 +119,8 @@
 				4EDCF95B1EFAA5E300571ED9 /* Info.plist */,
 				E0D978402885144200162C3D /* FaceDetectVC.swift */,
 				E0D978412885144200162C3D /* FaceDetectVC.xib */,
+				E0D4ABD52887B57D00837033 /* TemplateCollectionViewCell.swift */,
+				E0D4ABD62887B57D00837033 /* TemplateCollectionViewCell.xib */,
 			);
 			path = DetectFaceLandmarks;
 			sourceTree = "<group>";
@@ -200,18 +206,21 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = mathieu;
 				TargetAttributes = {
 					4EDCF94B1EFAA5E300571ED9 = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 1340;
 					};
 					4EDCF95F1EFAA5E300571ED9 = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 1340;
 						TestTargetID = 4EDCF94B1EFAA5E300571ED9;
 					};
 					4EDCF96A1EFAA5E300571ED9 = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 1340;
 						TestTargetID = 4EDCF94B1EFAA5E300571ED9;
 					};
 				};
@@ -242,6 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4EDCF95A1EFAA5E300571ED9 /* LaunchScreen.storyboard in Resources */,
+				E0D4ABD82887B57D00837033 /* TemplateCollectionViewCell.xib in Resources */,
 				4EDCF9571EFAA5E300571ED9 /* Assets.xcassets in Resources */,
 				E0D978432885144200162C3D /* FaceDetectVC.xib in Resources */,
 				4EDCF9551EFAA5E300571ED9 /* Main.storyboard in Resources */,
@@ -273,6 +283,7 @@
 				4EDCF9521EFAA5E300571ED9 /* ViewController.swift in Sources */,
 				4E871D991F129B7D00062C1C /* FaceLandmarksDetector.swift in Sources */,
 				4E40775D1F129F1F00D570AB /* UIImage+Scale.swift in Sources */,
+				E0D4ABD72887B57D00837033 /* TemplateCollectionViewCell.swift in Sources */,
 				4EDCF9501EFAA5E300571ED9 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,6 +353,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -349,8 +361,10 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -400,6 +414,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -407,8 +422,10 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -446,7 +463,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mathieubolard.DetectFaceLandmarks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -460,7 +477,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mathieubolard.DetectFaceLandmarks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -475,7 +492,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mathieubolard.DetectFaceLandmarksTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DetectFaceLandmarks.app/DetectFaceLandmarks";
 			};
@@ -491,7 +508,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mathieubolard.DetectFaceLandmarksTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DetectFaceLandmarks.app/DetectFaceLandmarks";
 			};
@@ -506,7 +523,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mathieubolard.DetectFaceLandmarksUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = DetectFaceLandmarks;
 			};
@@ -521,7 +538,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mathieubolard.DetectFaceLandmarksUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = DetectFaceLandmarks;
 			};

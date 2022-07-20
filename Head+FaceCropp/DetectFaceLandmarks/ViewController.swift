@@ -12,6 +12,7 @@ import Vision
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var faceImageView: UIImageView!
     let faceDetector = FaceLandmarksDetector()
     let captureSession = AVCaptureSession()
     @IBOutlet weak var imageView: UIImageView!
@@ -37,7 +38,8 @@ class ViewController: UIViewController {
             
             faceDetector.outputFaces(for: img) { (resultImage) in
                 DispatchQueue.main.async {
-                    self.imageView?.image = resultImage
+                    self.faceImageView.image = resultImage
+                  //  self.imageView?.image = resultImage
                 }
             }
         }
@@ -140,7 +142,8 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         if let image = UIImage(sampleBuffer: sampleBuffer)?.flipped()?.imageWithAspectFit(size: maxSize) {
             self.finalImage = image
             DispatchQueue.main.async {
-                self.imageView?.image = image
+               // self.imageView?.image = image
+                self.faceImageView.image = image
             }
             
 //            faceDetector.highlightFaces(for: image) { (resultImage) in

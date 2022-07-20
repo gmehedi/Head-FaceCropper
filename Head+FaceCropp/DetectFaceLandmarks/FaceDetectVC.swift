@@ -13,6 +13,9 @@ import Photos
 
 class FaceDetectVC: UIViewController {
     
+    @IBOutlet weak var templateImageView: UIImageView!
+    @IBOutlet weak var templateCollectoinView: UICollectionView!
+    @IBOutlet weak var faceImageView: UIImageView!
     let faceDetector = FaceLandmarksDetector()
     let captureSession = AVCaptureSession()
     @IBOutlet weak var imageView: UIImageView!
@@ -20,6 +23,9 @@ class FaceDetectVC: UIViewController {
     var usingFrontCamera = true
     var captureDevice: AVCaptureDevice!
     var imagePicker: UIImagePickerController?
+    @IBOutlet weak var faceImageViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var faceImageViewWidthConstraint: NSLayoutConstraint!
+    var templateImages = [UIImage]()
     
     
     override func viewDidLoad() {
@@ -29,9 +35,16 @@ class FaceDetectVC: UIViewController {
         configureDevice()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.view.layoutIfNeeded()
+        
+    }
+    
     
     @IBAction func tappedOnGellaryButton(_ sender: UIButton) {
-        self.imagePickerPresent()
+       // self.imagePickerPresent()
     }
     
     
@@ -42,7 +55,19 @@ class FaceDetectVC: UIViewController {
             
             faceDetector.outputFaces(for: img) { (resultImage) in
                 DispatchQueue.main.async {
-                    self.imageView?.image = resultImage.cropAlpha()
+                    self.templateImageView.image = UIImage(named: "IMG_0522")
+                    let output = resultImage.cropAlpha()
+                    
+                    let rect = AVMakeRect(aspectRatio: output.size, insideRect: self.faceImageView.bounds)
+                    self.faceImageViewWidthConstraint.constant = rect.width
+                    self.faceImageViewHeightConstraint.constant = rect.height
+                    
+                    self.faceImageView?.image = output
+                    
+                    if let ci = CIImage(image: output) ?? output.ciImage {
+                        self.exportTemplate(faceImg: ci)
+                    }
+                  
                 }
             }
         }
@@ -139,13 +164,14 @@ class FaceDetectVC: UIViewController {
 extension FaceDetectVC: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        
         // Scale image to process it faster
         let maxSize = CGSize(width: 1024, height: 1024)
         
         if let image = UIImage(sampleBuffer: sampleBuffer)?.flipped()?.imageWithAspectFit(size: maxSize) {
             self.finalImage = image
             DispatchQueue.main.async {
+                self.faceImageView?.image = nil
+                self.templateImageView.image = nil
                 self.imageView?.image = image
             }
             
@@ -183,7 +209,8 @@ extension FaceDetectVC: UIImagePickerControllerDelegate, UINavigationControllerD
             DispatchQueue.main.async {
                 self?.faceDetector.outputFaces(for: image) { (resultImage) in
                     DispatchQueue.main.async {
-                        self?.imageView?.image = resultImage.cropAlpha()
+                        self?.templateImageView.image = UIImage(named: "IMG_0521")
+                        self?.faceImageView?.image = resultImage.cropAlpha()
                     }
                 }
             }
@@ -306,6 +333,125 @@ extension UIImage {
         let ret = UIImage(cgImage: croppedImage, scale: imageScale, orientation: self.imageOrientation)
         
         return ret;
+    }
+}
+
+
+//MARK: CollectionView
+extension FaceDetectVC {
+    
+    func setupCollectionView() {
+        self.registerCollectionViewCell()
+        self.setCollectionViewFlowLayout()
+        self.setCollectionViewDelegate()
+    }
+    //MARK: Registration nib file and Set Delegate, Datasource
+    
+    fileprivate func registerCollectionViewCell(){
+        let emojiNib = UINib(nibName: TemplateCollectionViewCell.id, bundle: nil)
+        self.templateCollectoinView.register(emojiNib, forCellWithReuseIdentifier: TemplateCollectionViewCell.id)
+    }
+    
+    //MARK: Set Collection View Flow Layout
+    fileprivate func setCollectionViewFlowLayout(){
+        if let layoutMenu = self.templateCollectoinView.collectionViewLayout as? UICollectionViewFlowLayout{
+            layoutMenu.scrollDirection = .horizontal
+            layoutMenu.minimumLineSpacing = 0
+            layoutMenu.minimumInteritemSpacing = 0
+        }
+        self.templateCollectoinView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
+    //MARK: Set Collection View Delegate
+    fileprivate func setCollectionViewDelegate(){
+        self.templateCollectoinView.delegate = self
+        self.templateCollectoinView.dataSource = self
+    }
+    
+}
+
+extension FaceDetectVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.templateImages.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = self.templateCollectoinView.dequeueReusableCell(withReuseIdentifier: TemplateCollectionViewCell.id, for: indexPath) as? TemplateCollectionViewCell
+        cell?.imageView.image = self.templateImages[indexPath.item]
+        return cell!
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+       
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.bounds.height
+        let height =  collectionView.bounds.height
+        return CGSize(width: width, height: height)
+    }
+    
+}
+
+extension FaceDetectVC {
+    
+    func exportTemplate(faceImg: CIImage) {
+        let tm = UIImage(named: "IMG_0522")
+        var cTemp = CIImage(image: tm!) ?? tm!.ciImage
+        
+        let s512 = 512.0 / cTemp!.extent.width
+        
+        cTemp = cTemp?.transformed(by: CGAffineTransform(scaleX: s512, y: s512))
+        
+        var scale = self.faceImageView.bounds.width / self.templateImageView.bounds.width
+        
+        let curSize = scale * cTemp!.extent.width
+        
+        scale = curSize / faceImg.extent.width
+        
+        var face = faceImg.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
+        
+        var transX = self.faceImageView.frame.origin.x / self.templateImageView.bounds.width
+        var transY = self.faceImageView.frame.origin.y / self.templateImageView.bounds.height
+        
+        print("Fraa  ", self.faceImageView.frame,"   ", (transY *  cTemp!.extent.height))
+        transX = transX * cTemp!.extent.width
+        transY = cTemp!.extent.height - (transY *  cTemp!.extent.height) - face.extent.height
+        
+        
+        face = face.transformed(by: CGAffineTransform(translationX: transX, y: transY))
+        
+        let output = self.blendImage(topImage: face, bgImage: cTemp!)
+        
+        
+    }
+    
+    func blendImage(topImage: CIImage, bgImage: CIImage) -> CIImage? {
+        
+        let filter = CIFilter(name: "CISourceOverCompositing")
+        filter?.setValue(topImage, forKey: kCIInputImageKey)
+        filter?.setValue(bgImage, forKey: kCIInputBackgroundImageKey)
+        if let out = filter?.outputImage?.cropped(to: bgImage.extent) {
+            return out
+        }
+        return topImage
+    }
+    
+}
+
+
+extension UIColor {
+    func image(_ size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+        return UIGraphicsImageRenderer(size: size).image { rendererContext in
+            self.setFill()
+            rendererContext.fill(CGRect(origin: .zero, size: size))
+        }
     }
 }
 
